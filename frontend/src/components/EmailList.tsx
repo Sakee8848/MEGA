@@ -34,6 +34,9 @@ export default function EmailList({ viewMode, onSelect }: { viewMode: string, on
                 } else if (viewMode.startsWith('intention:')) {
                     const intent = viewMode.split(':')[1];
                     url += `?view_type=intention&entity_filter=${encodeURIComponent(intent)}`;
+                } else if (viewMode.startsWith('folder:')) {
+                    const folder = viewMode.split(':')[1];
+                    url += `?view_type=folder&entity_filter=${encodeURIComponent(folder)}`;
                 } else if (viewMode === 'mirror') {
                     url += '?view_type=intention&entity_filter=quote';
                 }
@@ -64,6 +67,10 @@ export default function EmailList({ viewMode, onSelect }: { viewMode: string, on
         if (viewMode.startsWith('intention:')) {
             const type = viewMode.split(':')[1];
             return type.charAt(0).toUpperCase() + type.slice(1) + 's';
+        }
+        if (viewMode.startsWith('folder:')) {
+            const folder = viewMode.split(':')[1];
+            return folder.charAt(0).toUpperCase() + folder.slice(1);
         }
         return 'Entity Mirror';
     };

@@ -25,8 +25,13 @@ class Email(SQLModel, table=True):
     message_id: str = Field(unique=True, index=True)
     sender: str = Field(index=True)
     recipients: List[str] = Field(sa_column=sa.Column(sa.JSON))
+    cc: List[str] = Field(default_factory=list, sa_column=sa.Column(sa.JSON))
+    bcc: List[str] = Field(default_factory=list, sa_column=sa.Column(sa.JSON))
     subject: str
     body_text: str
+    is_read: bool = Field(default=False)
+    is_deleted: bool = Field(default=False)
+    folder: str = Field(default="inbox", index=True) # inbox, sent, drafts, trash
     received_at: datetime = Field(default_factory=datetime.now)
     
     # Relationship to Logical Layer

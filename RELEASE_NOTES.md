@@ -1,3 +1,6 @@
+## Release 2026-01-20 (2026-01-20 20:50:29)
+- **Summary**: Implemented standard email features: Compose, Sent, Drafts, Trash, and Delete/Reply/Forward actions.
+
 ## Release 2026-01-20 (2026-01-20 19:53:56)
 - **Summary**: 邮箱初步构造骨架完成
 

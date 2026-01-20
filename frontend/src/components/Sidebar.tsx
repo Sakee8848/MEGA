@@ -49,6 +49,27 @@ export default function Sidebar({ activeView, onViewChange }: { activeView: stri
                 onClick={onViewChange}
                 count={4}
             />
+            <NavItem
+                id="folder:sent"
+                label="Sent"
+                icon="📤"
+                isActive={activeView === 'folder:sent'}
+                onClick={onViewChange}
+            />
+            <NavItem
+                id="folder:drafts"
+                label="Drafts"
+                icon="📝"
+                isActive={activeView === 'folder:drafts'}
+                onClick={onViewChange}
+            />
+            <NavItem
+                id="folder:trash"
+                label="Trash"
+                icon="🗑️"
+                isActive={activeView === 'folder:trash'}
+                onClick={onViewChange}
+            />
 
             <SectionHeader label="Intelligence" />
             {projectTypes.map(type => (

@@ -10,14 +10,22 @@ interface Email {
     received_at: string;
 }
 
-const ToolButton = ({ icon, label }: { icon: string, label?: string }) => (
-    <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md hover:bg-white/10 transition-colors text-text-secondary hover:text-primary">
+const ToolButton = ({ icon, label, onClick }: { icon: string, label?: string, onClick?: () => void }) => (
+    <button
+        onClick={onClick}
+        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md hover:bg-white/10 transition-colors text-text-secondary hover:text-primary"
+    >
         <span className="text-base">{icon}</span>
         {label && <span className="text-[12px] font-medium">{label}</span>}
     </button>
 );
 
-export default function Lens({ email }: { email: Email | null }) {
+export default function Lens({ email, onReply, onForward, onDelete }: {
+    email: Email | null,
+    onReply?: (e: Email) => void,
+    onForward?: (e: Email) => void,
+    onDelete?: (e: Email) => void
+}) {
     if (!email) {
         return (
             <div className="content-pane flex items-center justify-center text-text-tertiary">
@@ -34,13 +42,13 @@ export default function Lens({ email }: { email: Email | null }) {
             {/* Toolbar */}
             <div className="toolbar justify-between">
                 <div className="flex gap-1">
-                    <ToolButton icon="🗑️" />
+                    <ToolButton icon="🗑️" onClick={() => onDelete?.(email)} />
                     <ToolButton icon="📁" />
                     <ToolButton icon="🏷️" />
                 </div>
                 <div className="flex gap-1">
-                    <ToolButton icon="↩️" label="Reply" />
-                    <ToolButton icon="↪️" label="Forward" />
+                    <ToolButton icon="↩️" label="Reply" onClick={() => onReply?.(email)} />
+                    <ToolButton icon="↪️" label="Forward" onClick={() => onForward?.(email)} />
                 </div>
             </div>
 
