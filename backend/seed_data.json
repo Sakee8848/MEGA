@@ -1,0 +1,26 @@
+[
+    {
+        "sender": "underwriter@chubb.com",
+        "subject": "RE: Client A - 2026 Property Renewal Quote",
+        "body": "Dear Broker, Please find attached the renewal terms for Client A. \n\nPremium: $50,000\nDeductible: $5,000\nSubject to 30 days notice.\n\nBest,\nChubb Team",
+        "received_at": "2025-10-24T10:00:00"
+    },
+    {
+        "sender": "risk_manager@client-a.com",
+        "subject": "URGENT: Warehouse Fire Incident - Policy #889922",
+        "body": "Hi, We just had a small fire in the West Wing warehouse. Sprinklers activated. Estimated damage around $20k. Please advise on next steps.",
+        "received_at": "2025-11-02T08:30:00"
+    },
+    {
+        "sender": "me@broker.com",
+        "subject": "Meeting Notes: Client A Strategy Review",
+        "body": "As discussed in the meeting:\n1. Client is concerned about premium hikes.\n2. Agreed to market the property risk to AIG as alternative.\nAction items: Send submission by Friday.",
+        "received_at": "2025-10-20T14:00:00"
+    },
+    {
+        "sender": "prospect@new-co.com",
+        "subject": "Inquiry about Cyber Insurance",
+        "body": "Hello, we are a tech startup looking for Cyber Liability coverage. Can you help?",
+        "received_at": "2025-11-05T09:15:00"
+    }
+]
