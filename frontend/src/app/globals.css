@@ -1,0 +1,196 @@
+:root {
+  /* Apple-inspired Light/Dark Mode Variables */
+  /* Using SF Pro style colors */
+  --bg-app: 0 0% 100%;
+  --bg-sidebar: 240 5% 96%;
+  --bg-list: 0 0% 100%;
+  --bg-content: 0 0% 100%;
+
+  --border-subtle: 240 5% 90%;
+  --border-active: 250 100% 64%;
+
+  --text-primary: 240 10% 10%;
+  --text-secondary: 240 5% 45%;
+  --text-tertiary: 240 5% 65%;
+
+  --accent-blue: 210 100% 50%;
+  /* Classic Apple Blue */
+  --accent-purple: 270 100% 60%;
+  --accent-glow: 210 100% 50% 0.1;
+
+  --sidebar-width: 240px;
+  --list-width: 320px;
+  --header-height: 52px;
+
+  --selection-bg: 210 100% 50% 0.1;
+  --selection-text: 210 100% 50%;
+}
+
+[data-theme='dark'] {
+  --bg-app: 240 10% 4%;
+  --bg-sidebar: 240 6% 10%;
+  --bg-list: 240 6% 8%;
+  --bg-content: 240 6% 10%;
+
+  --border-subtle: 240 5% 15%;
+  --text-primary: 0 0% 95%;
+  --text-secondary: 240 5% 65%;
+  --text-tertiary: 240 5% 40%;
+
+  --selection-bg: 210 100% 50% 0.2;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: hsl(var(--bg-app));
+  color: hsl(var(--text-primary));
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", sans-serif;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Three Pane Layout Utilities */
+.pane-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: hsl(var(--bg-sidebar));
+  border-right: 1px solid hsl(var(--border-subtle));
+  flex-shrink: 0;
+}
+
+.list-pane {
+  width: var(--list-width);
+  background-color: hsl(var(--bg-list));
+  border-right: 1px solid hsl(var(--border-subtle));
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-pane {
+  flex: 1;
+  background-color: hsl(var(--bg-content));
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+}
+
+/* Apple Style Header/Toolbar */
+.toolbar {
+  height: var(--header-height);
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid hsl(var(--border-subtle));
+  gap: 12px;
+}
+
+/* Rounded Selection Style */
+.nav-item {
+  padding: 6px 12px;
+  margin: 2px 8px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: hsl(var(--text-secondary));
+  transition: all 0.1s ease;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: calc(100% - 16px);
+  text-align: left;
+}
+
+.nav-item.active {
+  background-color: hsl(var(--accent-blue));
+  color: white;
+}
+
+.nav-item:hover:not(.active) {
+  background-color: hsla(0, 0%, 50%, 0.1);
+  color: hsl(var(--text-primary));
+}
+
+/* Message List specific items */
+.message-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid hsl(var(--border-subtle));
+  cursor: pointer;
+  transition: background-color 0.1s;
+  position: relative;
+}
+
+.message-item:hover {
+  background-color: hsla(0, 0%, 50%, 0.05);
+}
+
+.message-item.selected {
+  background-color: hsl(var(--selection-bg));
+}
+
+.unread-dot {
+  width: 8px;
+  height: 8px;
+  background-color: hsl(var(--accent-blue));
+  border-radius: 50%;
+  position: absolute;
+  left: 4px;
+  top: 16px;
+}
+
+/* Typography styles */
+.font-bold {
+  font-weight: 600;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.text-xs {
+  font-size: 11px;
+}
+
+.text-sm {
+  font-size: 13px;
+}
+
+.text-subtle {
+  color: hsl(var(--text-secondary));
+}
+
+/* Scrollbar refinement */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border-subtle));
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--text-tertiary));
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
