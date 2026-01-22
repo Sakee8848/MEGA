@@ -34,14 +34,6 @@ class EmailIngestRequest(SQLModel):
     body: str
     received_at: Optional[datetime] = None
 
-class EmailComposeRequest(SQLModel):
-    subject: str
-    recipients: List[str]
-    cc: Optional[List[str]] = []
-    bcc: Optional[List[str]] = []
-    body_text: str
-    folder: str = "sent" # sent or drafts
-
 @app.post("/ingest")
 def ingest_email(email_req: EmailIngestRequest, session: Session = Depends(get_session)):
     """
@@ -144,22 +136,17 @@ def mine_skills(session: Session = Depends(get_session)):
 # --- Retrieval Endpoints ---
 @app.get("/emails/mirror", response_model=List[dict])
 def get_mirror_view(
-    view_type: str = "time", # time, entity, intention, folder
+    view_type: str = "time", # time, entity, intention
     entity_filter: Optional[str] = None,
     session: Session = Depends(get_session)
 ):
     """
     The Core 'Mirror View' Logic.
-    Supports time-based, entity-based, attribute-based, and folder-based views.
+    Supports time-based, entity-based, and attribute-based views.
     """
-    if view_type == "folder" and entity_filter:
-        if entity_filter == "trash":
-            query = select(MirrorIndex, Email).join(Email).where(sa.or_(Email.folder == "trash", Email.is_deleted == True))
-        else:
-            query = select(MirrorIndex, Email).join(Email).where(Email.folder == entity_filter, Email.is_deleted == False)
-    elif view_type == "entity" and entity_filter:
+    if view_type == "entity" and entity_filter:
         # Join with tags to filter by entity
-        query = select(MirrorIndex, Email).join(Email).join(MirrorTag).where(MirrorTag.value == entity_filter, Email.is_deleted == False).distinct()
+        query = select(MirrorIndex, Email).join(Email).join(MirrorTag).where(MirrorTag.value == entity_filter).distinct()
     elif view_type == "intention":
         if entity_filter == "quote":
             query = select(MirrorIndex, Email).join(Email).where(MirrorIndex.is_quote == True)
@@ -172,8 +159,8 @@ def get_mirror_view(
         else:
             query = select(MirrorIndex, Email).join(Email)
     else:
-        # Default: Time View (Inbox)
-        query = select(MirrorIndex, Email).join(Email).where(Email.folder == "inbox", Email.is_deleted == False).order_by(Email.received_at.desc())
+        # Default: Time View
+        query = select(MirrorIndex, Email).join(Email).order_by(Email.received_at.desc())
             
     results = session.exec(query).all()
     
@@ -188,52 +175,8 @@ def get_mirror_view(
             "is_quote": mirror.is_quote,
             "is_claim": mirror.is_claim,
             "is_renewal": mirror.is_renewal,
-            "is_read": email.is_read,
-            "folder": email.folder,
             "acord_data": mirror.acord_payload,
             "received_at": email.received_at
         })
     
     return output
-
-@app.patch("/emails/{email_id}")
-def update_email(email_id: UUID, update_data: dict, session: Session = Depends(get_session)):
-    db_email = session.get(Email, email_id)
-    if not db_email:
-        raise HTTPException(status_code=404, detail="Email not found")
-    
-    for key, value in update_data.items():
-        if hasattr(db_email, key):
-            setattr(db_email, key, value)
-    
-    session.add(db_email)
-    session.commit()
-    return {"status": "success"}
-
-@app.post("/emails/compose")
-def compose_email(req: EmailComposeRequest, session: Session = Depends(get_session)):
-    db_email = Email(
-        message_id=f"msg_{datetime.now().timestamp()}",
-        sender="me@broker.com",
-        recipients=req.recipients,
-        cc=req.cc,
-        bcc=req.bcc,
-        subject=req.subject,
-        body_text=req.body_text,
-        folder=req.folder,
-        is_read=True
-    )
-    session.add(db_email)
-    session.commit()
-    session.refresh(db_email)
-    
-    # Create empty mirror for sent emails
-    mirror = MirrorIndex(
-        email_id=db_email.id,
-        embedding=[0.0] * 1536,
-        priority_score=0.0
-    )
-    session.add(mirror)
-    session.commit()
-    
-    return {"status": "success", "id": str(db_email.id)}
